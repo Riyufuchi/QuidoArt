@@ -9,7 +9,9 @@
 
 ## About
 
-This is version that uses Qt framework for gui instead of SDL2 original ConsoleArt project. 
+This is version that uses Qt framework for gui instead of SDL2 as in original ConsoleArt project. 
+
+### Features
 
 This application works with images and supports even multi-page and animated ones.
 
@@ -29,7 +31,7 @@ Highlighted features:
 | Name | Used for | Included in this repository |
 | :------: | :----------: | :---: |
 | [ConsoleLib](https://github.com/Riyufuchi/ConsoleLib) | Console stuff | ✅ |
-| [stb](https://github.com/nothings/stb) | Working with complex picture formats | ✅ |
+| [ConsoleArtLib](https://github.com/Riyufuchi/ConsoleArtLib) | Image tools | ✅ |
 | [tinyfiledialogs](http://tinyfiledialogs.sourceforge.net) | Crossplatform dialogs | ✅ |
 
 ## Documentation

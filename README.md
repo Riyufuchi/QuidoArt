@@ -2,7 +2,6 @@
 
 - [About](#about)
 - [Used libraries](#used-libraries)
-- [Documentation](#documentation)
 - [Compilation](#compilation)
 - [Project guide](#project-guide)
 - [Donate](#donate)
@@ -33,30 +32,7 @@ Highlighted features:
 | [ConsoleLib](https://github.com/Riyufuchi/ConsoleLib) | Console stuff | ✅ |
 | [ConsoleArtLib](https://github.com/Riyufuchi/ConsoleArtLib) | Image tools | ✅ |
 | [tinyfiledialogs](http://tinyfiledialogs.sourceforge.net) | Crossplatform dialogs | ✅ |
-
-## Documentation
-
-**!!! Not yet added to the repository!!!**
-
- ```bash
-    # Make sure you have LaTeX installed
-
-    # On Debian/Ubuntu
-    sudo apt install texlive-full
-
-    # On macOS
-    brew install --cask mactex
-
-    # On Windows
-    # Get the installer from https://www.tug.org/texlive/windows.html
-
-    # Get the repository - how to is in section Git and Make
-    # Build the PDF documentation
-    # (CMake runs LaTeX twice so Table of Contents and references are correct)
-    cd latex-doc/
-    cmake ..
-    cmake --build . --target docs
-   ```
+| [Qt](https://www.qt.io/development/application-development) | GUI | ❌ |
 
 ## Compilation
 
@@ -65,7 +41,7 @@ Highlighted features:
 | OS | Compiler |
 | :------: | :----------: |
 | Ubuntu | g++ 15.2.0 |
-| Windows 10 | MSVC 19.50.35719.0 |
+| <s> Windows 10 </s> | <s> MSVC 19.50.35719.0 </s> |
 
 ### CMake
 

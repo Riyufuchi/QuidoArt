@@ -89,44 +89,24 @@ qt_standard_project_setup()
 
 qt_add_executable(QuidoArt ${APP_SOURCES})
 
-if (WIN32)
-	set_target_properties(QuidoArt PROPERTIES WIN32_EXECUTABLE OFF)
-endif()
-
-
 # Link everything
-target_include_directories(QuidoArt PRIVATE
-	${CONSOLE_LIB_DIR}/inc
-)
+target_include_directories(QuidoArt PRIVATE ${CONSOLE_LIB_DIR}/inc)
 
-target_link_libraries(QuidoArt PRIVATE Qt6::Widgets)
-
-if (WIN32)
-	target_link_libraries(QuidoArt PRIVATE
-	ConsoleLib
-	ConsoleArtLib
-)
-else()
-	target_link_libraries(QuidoArt PRIVATE
-	ConsoleLib
-	ConsoleArtLib
-)
+target_link_libraries(QuidoArt PRIVATE ConsoleLib ConsoleArtLib)
 target_link_libraries(QuidoArt PRIVATE Qt6::Core Qt6::Widgets)
-endif()
 
 #
 # Documentation
 #
-
 # Path to LaTeX source folder
 set(LATEX_DIR ${CMAKE_CURRENT_SOURCE_DIR}/latex-doc)
-set(MAIN_TEX ConsoleArt.tex)
-set(OUTPUT_PDF ${CMAKE_CURRENT_BINARY_DIR}/ConsoleArt.pdf)
+set(MAIN_TEX QuidoArt.tex)
+set(OUTPUT_PDF ${CMAKE_CURRENT_BINARY_DIR}/QuidoArt.pdf)
 
 # Custom target to build docs
 add_custom_target(docs
 	COMMAND ${CMAKE_COMMAND} -E chdir ${LATEX_DIR} lualatex ${MAIN_TEX}
-	COMMAND ${CMAKE_COMMAND} -E chdir ${LATEX_DIR} makeglossaries ConsoleArt
+	COMMAND ${CMAKE_COMMAND} -E chdir ${LATEX_DIR} makeglossaries QuidoArt
 	COMMAND ${CMAKE_COMMAND} -E chdir ${LATEX_DIR} lualatex ${MAIN_TEX}
 	COMMAND ${CMAKE_COMMAND} -E chdir ${LATEX_DIR} lualatex ${MAIN_TEX}
 	COMMENT "Building PDF documentation with lualatex and makeglossaries"

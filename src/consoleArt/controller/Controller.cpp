@@ -38,13 +38,6 @@ Controller::Controller(std::string path, AbstractNotifier* notifier, IMenu* menu
 	argumentMethods["--path"] = [&](const std::vector<std::string>& vector) { if (vector.empty()) return; setWorkspace(vector[0]); };
 	argumentMethods["--p"] = argumentMethods["--path"];
 	argumentMethods["--loadAll"] = [&](const std::vector<std::string>&) { std::thread([&]() { loadAllImagesAsync(); }).detach(); };
-	argumentMethods["--binomial"] = [&](const auto& vector)
-	{
-		auto res = Math::MathUtils::binomialDistribution(vector);
-		consolelib::Output::configStream(16);
-		consolelib::Output::printResults<int, long double>(res);
-		isRunnable = false;
-	};
 	argumentMethods["--removeGray"] = [&](const auto&)
 	{
 		loadAllImagesAsync();

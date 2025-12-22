@@ -13,118 +13,55 @@
 
 #include <QApplication>
 
-#include "consoleArt/controller/ControllerCLI.h"
-#include "consoleArt/controller/ControllerTFD.h"
-#include"consoleArt/controller/ControllerQt.h"
 #include "consoleArt/tools/GeneralTools.hpp"
 #include "ConsoleUtils.h"
-#include "UnixConsole.h"
-#include "IConsole.hpp"
-#include "DefaultConsole.h"
 #include "ArgumentParser.h"
-#include "other/ScheduleTracker.h"
 #include "consoleArt/gui/qt/MainWindow.h"
-#ifdef _WIN32
-	#include "WindowsConsole.h"
-#endif // _WIN32
 
-using ParsedArguments = consolelib::argVector; // or consolelib::argMap
+using ParsedArguments = consolelib::argVector;
 
 enum BootAction
 {
 	ABORT,
 	DISPLAY_MANUAL,
-	CONFIGURE,
 	CONTINUE,
-	TEST,
 	ABOUT,
-	LIBRARY,
-	SCHEDULE
+	LIBRARY
 };
 
-BootAction checkArgs(ParsedArguments& argPairs, consolelib::IConsole& console);
+BootAction checkArgs(ParsedArguments& argPairs);
 
-BootAction abort(consolelib::IConsole& console)
+BootAction abortQuidoArtLaunch()
 {
-	console.err("Unrecognized action. Aborting!");
+	std::cerr << "Unrecognized action. Aborting!\n";
 	return BootAction::ABORT;
 }
 
 int main(int argc, char** argv)
 {
-	consolelib::IConsole* systemConsole = consolelib::ConsoleUtils::createPlatformConsole();
-
-	if (systemConsole == nullptr)
-	{
-		std::cerr << "Failed to create platform console.\nExiting program!";
-		return 1;
-	}
-
-	systemConsole->setDefaultTextColor(consolelib::ColorUtils::getColor(consolelib::ColorPallete::APERTURE_ORANGE));
-
-	consolelib::ConsoleUtils::header("\n    " + std::string(consoleart::GeneralTools::CONSOLE_ART_VERSION) + "\n   ", *systemConsole);
-
 	bool success = true;
 	std::string resultMsg = "";
-	ParsedArguments argPairs = consolelib::ArgumentParser::analyzeInOrder(argc, argv, success, resultMsg); // or just analyzeArguments(argc, argv, success, resultMsg);
-	if (success)
-		systemConsole->out(resultMsg + "\n");
-	else
+	ParsedArguments argPairs = consolelib::ArgumentParser::analyzeInOrder(argc, argv, success, resultMsg);
+	if (!success)
 	{
-		systemConsole->err(resultMsg + "\n");
+		std::cerr << resultMsg << "\n";
 		return 1;
 	}
 
-	#ifdef DEBUG
-		systemConsole->out(153, 102, 51, "!!! This is a debug build !!!\n");
-		consolelib::ArgumentParser::printArgumentPairs(argPairs);
-	#endif
-
-	consoleart::Controller* consoleArt;
-	bool isQt = false;
-
-	if (consolelib::ArgumentParser::remove(argPairs, "--noGUI"))
-	{
-		consoleArt = new consoleart::ControllerCLI(systemConsole);
-	}
-	else if (consolelib::ArgumentParser::remove(argPairs, "--tfd"))
-	{
-		consoleArt = new consoleart::ControllerTFD(systemConsole);
-	}
-	else
-	{
-		consoleArt = new consoleart::ControllerQt();
-		isQt = true;
-	}
-
-	if (consoleArt == nullptr)
-		return 1;
-
-	switch (checkArgs(argPairs, *systemConsole))
+	switch (checkArgs(argPairs))
 	{
 		case ABORT: return 1;
 		case CONTINUE: goto start;
-		case CONFIGURE: goto conf;
-		default:
-			if (consoleArt)
-				delete consoleArt;
-		return 0; // For other cases that result in success
+		default: return 0; // For other cases that result in success
 	}
-	conf: consoleArt->configure(argPairs);
-	start: consoleArt->run();
-	if (isQt)
-	{
-		QApplication app(argc, argv);
-		consoleart::MainWindow window;
-		window.show();
-		app.exec();
-	}
-	delete consoleArt;
-	delete systemConsole;
-	return 0;
+
+	start: QApplication app(argc, argv);
+	consoleart::MainWindow window;
+	window.show();
+	return app.exec();
 }
 
-BootAction checkArgs(ParsedArguments& argPairs, consolelib::IConsole& console)
+BootAction checkArgs(ParsedArguments& argPairs)
 {
 	if (argPairs.empty())
 		return BootAction::CONTINUE;
@@ -132,10 +69,8 @@ BootAction checkArgs(ParsedArguments& argPairs, consolelib::IConsole& console)
 	const std::vector<std::pair<std::string, BootAction>> checkFor = {
 		{"--man", BootAction::DISPLAY_MANUAL},
 		{"--help", BootAction::DISPLAY_MANUAL},
-		{"--colorTest", BootAction::TEST},
 		{"--about", BootAction::ABOUT},
-		{"--library", BootAction::LIBRARY},
-		{"--schedule", BootAction::SCHEDULE}
+		{"--library", BootAction::LIBRARY}
 	};
 
 	for (std::pair<std::string, BootAction> arg : checkFor)
@@ -145,13 +80,11 @@ BootAction checkArgs(ParsedArguments& argPairs, consolelib::IConsole& console)
 			switch (arg.second)
 			{
 				case DISPLAY_MANUAL: consoleart::GeneralTools::createManual(); return arg.second;
-				case TEST: consoleart::GeneralTools::colorTest(console); return arg.second;
-				case ABOUT: console.out(consoleart::GeneralTools::aboutApplication()); return arg.second;
-				case LIBRARY: console.out(consoleart::GeneralTools::usedLibraries()); return arg.second;
-				case SCHEDULE: Other::ScheduleTracker(console).run(); return arg.second;
-				default: abort(console);
+				case ABOUT: std::cout << consoleart::GeneralTools::aboutApplication() << "\n"; return arg.second;
+				case LIBRARY: std::cout << consoleart::GeneralTools::usedLibraries() << "\n"; return arg.second;
+				default: abortQuidoArtLaunch();
 			}
 	}
 
-	return BootAction::CONFIGURE;
+	return BootAction::CONTINUE;
 }

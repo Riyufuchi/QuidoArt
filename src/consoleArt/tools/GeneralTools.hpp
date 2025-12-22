@@ -15,12 +15,11 @@
 #include <string>
 
 #include "ConsoleUtils.h"
-#include "IConsole.hpp"
 
 #define _COPYRIGHT_HEADER "Riyufuchi (c) 2020 - 2025\n"
 
 #define _APP_NAME "QuidoArt"
-#define _APP_VERSION "0.1"
+#define _APP_VERSION "0.2"
 
 #ifdef DEBUG
 	#define _APP_BETA_VERSION " Alpha"
@@ -44,18 +43,12 @@ public:
 		std::string args[] = {
 			"Arguments| Actions",
 			"-p --path [path]| Specify workspace folder",
-			"--colorTest| Print colored text for testing",
 			"--loadAll| Loads all images in workspace (should be after --path)",
 			"--image [path...]| Loads given image or images (in workspace if defined)",
-			"--no-color| Disable colored outputs, for when they are not supported",
-			"--color [colorID]| Sets default text color",
 			"--about| Shows details about this application",
 			"--benchmark [path (optional)]| Starts simple benchmark that loads and convert image (default file: bench.pcx)",
-			"--binomial [N, P, K...]| Binomial distribution",
 			"--library| Shows info about ConsoleLib and other used libraries besides standard and platform depended",
 			"--compare [image1] [image2]| Compare dimensions of the two given images",
-			"--noGUI| Starts application in pure CLI mode",
-			"--tfd| Starts application in CLI mode using TinyFileDialogs"
 		};
 		consolelib::ConsoleUtils::createManual(args, sizeof(args)/sizeof(args[0]));
 	}
@@ -66,8 +59,7 @@ public:
 		std::string libs[] = {
 			"Name| Used for",
 			"stb| Complex images",
-			"SDL2| GUI",
-			"TinyFileDialogs| Cross-platform dialogs"
+			"Qt| GUI",
 		};
 		info << "\n" << consolelib::ConsoleUtils::createTable(libs, sizeof(libs)/sizeof(libs[0]));
 		return info.str();
@@ -101,15 +93,6 @@ public:
 		aboutStringStream << consolelib::ConsoleUtils::createTable(args, sizeof(args)/sizeof(args[0])) << "\n";
 		aboutStringStream << usedLibraries();
 		return aboutStringStream.str();
-	}
-	static void colorTest(consolelib::IConsole& console)
-	{
-		for (int i = 0; i < consolelib::ColorPallete::COLOR_COUNT; ++i)
-		{
-			std::cout << i + 1 << ". ";
-			console.out(consolelib::ColorUtils::getColor(static_cast<consolelib::ColorPallete>(i)), consolelib::ColorUtils::colorPaletteNames[i]);
-			std::cout << "\n";
-		}
 	}
 	static std::string createArgErrorMessage(const std::string& argument)
 	{

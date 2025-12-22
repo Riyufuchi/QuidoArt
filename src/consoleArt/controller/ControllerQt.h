@@ -2,7 +2,6 @@
 #define CONTROLLERQT_H
 
 #include "Controller.h"
-#include "../gui/tinyFileDialogs/NotifierTFD.h"
 
 namespace consoleart
 {

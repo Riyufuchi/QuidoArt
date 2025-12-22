@@ -57,9 +57,9 @@ if (WIN32)
 	IMPORTED_LOCATION ${CONSOLE_LIB_DIR}/ConsoleLib.lib
 	INTERFACE_INCLUDE_DIRECTORIES ${CONSOLE_LIB_DIR}/inc)
 
-set_target_properties(ConsoleArtLib PROPERTIES
-IMPORTED_LOCATION ${GENERAL_LIB_DIR}/ConsoleArtLib/ConsoleArtLib.lib
-INTERFACE_INCLUDE_DIRECTORIES ${GENERAL_LIB_DIR}/ConsoleArtLib/includes)
+	set_target_properties(ConsoleArtLib PROPERTIES
+	IMPORTED_LOCATION ${GENERAL_LIB_DIR}/ConsoleArtLib/ConsoleArtLib.lib
+	INTERFACE_INCLUDE_DIRECTORIES ${GENERAL_LIB_DIR}/ConsoleArtLib/includes)
 else()
 	set_target_properties(ConsoleLib PROPERTIES
 	IMPORTED_LOCATION ${CONSOLE_LIB_DIR}/libConsoleLib.a
@@ -91,8 +91,9 @@ qt_add_executable(QuidoArt ${APP_SOURCES})
 
 # Link everything
 target_include_directories(QuidoArt PRIVATE ${CONSOLE_LIB_DIR}/inc)
+target_include_directories(QuidoArt PRIVATE ${GENERAL_LIB_DIR}/ConsoleArtLib/includes)
 
-target_link_libraries(QuidoArt PRIVATE ConsoleLib ConsoleArtLib)
+target_link_libraries(QuidoArt PRIVATE ConsoleArtLib ConsoleLib)
 target_link_libraries(QuidoArt PRIVATE Qt6::Core Qt6::Widgets)
 
 #

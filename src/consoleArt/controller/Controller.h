@@ -32,7 +32,6 @@
 #include "../abstract/AbstractNotifier.h"
 #include "../interfaces/IMenu.hpp"
 #include "../abstract/AbstractAsciiPrinter.h"
-#include "../../other/MathUtils.hpp"
 
 namespace consoleart
 {

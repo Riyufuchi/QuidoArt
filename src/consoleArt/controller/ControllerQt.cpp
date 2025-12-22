@@ -3,7 +3,7 @@
 namespace consoleart
 {
 
-ControllerQt::ControllerQt() : Controller(new NotifierTFD(), nullptr, nullptr)
+ControllerQt::ControllerQt() : Controller(nullptr, nullptr, nullptr)
 {}
 
 
